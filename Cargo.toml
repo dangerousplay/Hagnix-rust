@@ -1,0 +1,21 @@
+[package]
+name = "Hagnix-rust"
+version = "0.1.0"
+authors = ["dangerousplay <gm.davi.gm@live.com>"]
+edition = "2018"
+
+[dependencies]
+protobuf        = "2"
+futures         = "0.1.*"
+futures-cpupool = "0.1.*"
+tls-api            = "0.1.*"
+tls-api-native-tls = "0.1.*"
+httpbis         = "~0.7"
+env_logger      = "~0.5"
+grpc            = "~0.6.1"
+protoc-rust-grpc = "0.6.1"
+
+[lib]
+name = "gRPC"
+crate-type = ["dylib"]
+
