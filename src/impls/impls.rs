@@ -1,28 +1,15 @@
-extern crate futures;
-
-extern crate grpc;
-extern crate tls_api;
-extern crate tls_api_native_tls;
-
-use std::env;
-use std::thread;
-use grpc::ServerBuilder;
-
-use tls_api::TlsAcceptorBuilder;
 use grpc::RequestOptions;
-use hagnix::rotmg::KickRequest;
 use grpc::SingleResponse;
-use hagnix::rotmg::Empty;
-use hagnix::rotmg::Player;
-use hagnix::rotmg::Server;
-use hagnix::rotmg::EmailRequest;
-use hagnix::rotmg::CreatePlayerRequest;
-use hagnix::rotmg_grpc::Game;
-use hagnix::rotmg::ListPlayersResponse;
-use tls_api_native_tls::TlsAcceptor;
-use hagnix::rotmg_grpc::GameServer;
+use crate::impls::proto::rotmg_grpc::Game;
+use crate::impls::proto::rotmg::KickRequest;
+use crate::impls::proto::rotmg::Empty;
+use crate::impls::proto::rotmg::ListPlayersResponse;
+use crate::impls::proto::rotmg::EmailRequest;
+use crate::impls::proto::rotmg::Player;
+use crate::impls::proto::rotmg::CreatePlayerRequest;
+use crate::impls::proto::rotmg::Server;
 
-struct GameServerImpl;
+pub struct GameServerImpl;
 
 impl Game for GameServerImpl {
     fn kick_player(&self, o: RequestOptions, p: KickRequest) -> SingleResponse<Empty> {
@@ -67,21 +54,5 @@ impl Game for GameServerImpl {
 
     fn server_info(&self, o: RequestOptions, p: Empty) -> SingleResponse<Server> {
         unimplemented!()
-    }
-}
-
-fn main() {
-
-    let port = 50051;
-
-    let mut server: ServerBuilder<TlsAcceptor> = ServerBuilder::new();
-    server.http.set_port(port);
-    server.add_service(GameServer::new_service_def(GameServerImpl));
-    server.http.set_cpu_pool_threads(4);
-
-    let _server = server.build().expect("server");
-
-    loop {
-        thread::park();
     }
 }
